@@ -1,42 +1,8 @@
-import * as fs from 'fs';
-import * as Papa from 'papaparse';
-
-interface Student {
-  gender: string;
-  exam_result: string;
-  age: number;
-  class: number;
-  parent_educated: string;
-  daily_study_hours: number;
-  attendance_percentage: number;
-  family_income: string;
-  extracurricular: string;
-  sleep_hours: number;
-  internet_access: string;
-  previous_grade: string;
-  learning_style: string;
-  school_type: string;
-  teacher_quality: string;
-  stress_level: string;
-  distance_to_school: number;
-  tutoring: string;
-}
-
-async function loadDataset(filePath: string): Promise<Student[]> {
-  return new Promise((resolve, reject) => {
-    const fileContent = fs.readFileSync(filePath, 'utf-8');
-    Papa.parse(fileContent, {
-      header: true,
-      dynamicTyping: true,
-      complete: (result) => resolve(result.data as Student[]),
-      error: (error: any) => reject(error),
-    });
-  });
-}
+import { loadDataset } from './helpers';
 
 // 1. Mean attendance percentage for failed students
 async function computeMeanAttendanceForFailed(): Promise<number> {
-  const data = await loadDataset('student_performance_dataset.csv');
+  const data = await loadDataset();
   const failedRows = data.filter(row => row.exam_result === 'fail');
   const totalAttendance = failedRows.reduce((sum, row) => sum + row.attendance_percentage, 0);
   return failedRows.length > 0 ? totalAttendance / failedRows.length : 0;
@@ -44,7 +10,7 @@ async function computeMeanAttendanceForFailed(): Promise<number> {
 
 // 2. Mean attendance percentage for passed students
 async function computeMeanAttendanceForPassed(): Promise<number> {
-  const data = await loadDataset('student_performance_dataset.csv');
+  const data = await loadDataset();
   const passedRows = data.filter(row => row.exam_result === 'pass');
   const totalAttendance = passedRows.reduce((sum, row) => sum + row.attendance_percentage, 0);
   return passedRows.length > 0 ? totalAttendance / passedRows.length : 0;
@@ -52,7 +18,7 @@ async function computeMeanAttendanceForPassed(): Promise<number> {
 
 // 3. Mean study hours for failed students
 async function computeMeanStudyHoursForFailed(): Promise<number> {
-  const data = await loadDataset('student_performance_dataset.csv');
+  const data = await loadDataset();
   const failedRows = data.filter(row => row.exam_result === 'fail');
   const totalStudyHours = failedRows.reduce((sum, row) => sum + row.daily_study_hours, 0);
   return failedRows.length > 0 ? totalStudyHours / failedRows.length : 0;
@@ -60,7 +26,7 @@ async function computeMeanStudyHoursForFailed(): Promise<number> {
 
 // 4. Mean study hours for passed students
 async function computeMeanStudyHoursForPassed(): Promise<number> {
-  const data = await loadDataset('student_performance_dataset.csv');
+  const data = await loadDataset();
   const passedRows = data.filter(row => row.exam_result === 'pass');
   const totalStudyHours = passedRows.reduce((sum, row) => sum + row.daily_study_hours, 0);
   return passedRows.length > 0 ? totalStudyHours / passedRows.length : 0;
@@ -68,7 +34,7 @@ async function computeMeanStudyHoursForPassed(): Promise<number> {
 
 // 5. Mean sleep hours for failed students
 async function computeMeanSleepHoursForFailed(): Promise<number> {
-  const data = await loadDataset('student_performance_dataset.csv');
+  const data = await loadDataset();
   const failedRows = data.filter(row => row.exam_result === 'fail');
   const totalSleepHours = failedRows.reduce((sum, row) => sum + row.sleep_hours, 0);
   return failedRows.length > 0 ? totalSleepHours / failedRows.length : 0;
@@ -76,7 +42,7 @@ async function computeMeanSleepHoursForFailed(): Promise<number> {
 
 // 6. Mean sleep hours for passed students
 async function computeMeanSleepHoursForPassed(): Promise<number> {
-  const data = await loadDataset('student_performance_dataset.csv');
+  const data = await loadDataset();
   const passedRows = data.filter(row => row.exam_result === 'pass');
   const totalSleepHours = passedRows.reduce((sum, row) => sum + row.sleep_hours, 0);
   return passedRows.length > 0 ? totalSleepHours / passedRows.length : 0;
@@ -84,7 +50,7 @@ async function computeMeanSleepHoursForPassed(): Promise<number> {
 
 // 7. Mean distance to school for failed students
 async function computeMeanDistanceForFailed(): Promise<number> {
-  const data = await loadDataset('student_performance_dataset.csv');
+  const data = await loadDataset();
   const failedRows = data.filter(row => row.exam_result === 'fail');
   const totalDistance = failedRows.reduce((sum, row) => sum + row.distance_to_school, 0);
   return failedRows.length > 0 ? totalDistance / failedRows.length : 0;
@@ -92,7 +58,7 @@ async function computeMeanDistanceForFailed(): Promise<number> {
 
 // 8. Mean distance to school for passed students
 async function computeMeanDistanceForPassed(): Promise<number> {
-  const data = await loadDataset('student_performance_dataset.csv');
+  const data = await loadDataset();
   const passedRows = data.filter(row => row.exam_result === 'pass');
   const totalDistance = passedRows.reduce((sum, row) => sum + row.distance_to_school, 0);
   return passedRows.length > 0 ? totalDistance / passedRows.length : 0;
@@ -100,7 +66,7 @@ async function computeMeanDistanceForPassed(): Promise<number> {
 
 // 9. Median attendance percentage for failed students
 async function computeMedianAttendanceForFailed(): Promise<number> {
-  const data = await loadDataset('student_performance_dataset.csv');
+  const data = await loadDataset();
   const failedRows = data.filter(row => row.exam_result === 'fail');
   const attendanceValues = failedRows.map(row => row.attendance_percentage).sort((a, b) => a - b);
   if (attendanceValues.length === 0) return 0;
@@ -112,7 +78,7 @@ async function computeMedianAttendanceForFailed(): Promise<number> {
 
 // 10. Median study hours for failed students
 async function computeMedianStudyHoursForFailed(): Promise<number> {
-  const data = await loadDataset('student_performance_dataset.csv');
+  const data = await loadDataset();
   const failedRows = data.filter(row => row.exam_result === 'fail');
   const studyHoursValues = failedRows.map(row => row.daily_study_hours).sort((a, b) => a - b);
   if (studyHoursValues.length === 0) return 0;
@@ -126,8 +92,15 @@ async function computeMedianStudyHoursForFailed(): Promise<number> {
 async function main() {
   try {
     console.log(`Mean attendance for failed students = ${(await computeMeanAttendanceForFailed()).toFixed(2)}%`);
-    console.log(`Median attendance for failed students = ${(await computeMedianAttendanceForFailed()).toFixed(2)}%`);
+    console.log(`Mean attendance for passed students = ${(await computeMeanAttendanceForPassed()).toFixed(2)}%`);
     console.log(`Mean study hours for failed students = ${(await computeMeanStudyHoursForFailed()).toFixed(2)} hours`);
+    console.log(`Mean study hours for passed students = ${(await computeMeanStudyHoursForPassed()).toFixed(2)} hours`);
+    console.log(`Mean sleep hours for failed students = ${(await computeMeanSleepHoursForFailed()).toFixed(2)} hours`);
+    console.log(`Mean sleep hours for passed students = ${(await computeMeanSleepHoursForPassed()).toFixed(2)} hours`);
+    console.log(`Mean distance to school for failed students = ${(await computeMeanDistanceForFailed()).toFixed(2)} km`);
+    console.log(`Mean distance to school for passed students = ${(await computeMeanDistanceForPassed()).toFixed(2)} km`);
+    console.log(`Median attendance for failed students = ${(await computeMedianAttendanceForFailed()).toFixed(2)}%`);
+    console.log(`Median study hours for failed students = ${(await computeMedianStudyHoursForFailed()).toFixed(2)} hours`);
   } catch (error) {
     console.error('Error:', error);
   }

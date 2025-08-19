@@ -2,11 +2,11 @@
 
 ## Overview
 
-This project contains a synthetic dataset (`student_performance_extended_dataset.csv`) representing academic performance and related attributes for 100,000 students, along with five TypeScript files implementing 100 probability functions to analyze the dataset. The functions compute marginal, conditional, joint, and statistical probabilities, focusing on relationships between exam outcomes and other variables, such as gender, attendance, and family income.
+This project contains a synthetic dataset (`student_performance_dataset.csv`) representing academic performance and related attributes for 100,000 students, along with five TypeScript files implementing 100 probability functions to analyze the dataset. The functions compute marginal, conditional, joint, and statistical probabilities, focusing on relationships between exam outcomes and other variables, such as gender, attendance, and family income.
 
 ## Dataset Description
 
-The dataset (`student_performance_extended_dataset.csv`) includes 100,000 rows and 18 fields, generated with specific probability distributions to simulate realistic student performance scenarios. The fields are:
+The dataset (`student_performance_dataset.csv`) includes 100,000 rows and 18 fields, generated with specific probability distributions to simulate realistic student performance scenarios. The fields are:
 
 | Field                   | Type    | Description                                          | Distribution                              |
 | ----------------------- | ------- | ---------------------------------------------------- | ----------------------------------------- |
@@ -33,7 +33,7 @@ The dataset (`student_performance_extended_dataset.csv`) includes 100,000 rows a
 
 - **Size**: ~20–30 MB (100,000 rows).
 - **Generation**: Fields are generated independently, so conditional probabilities (e.g., \( P(\text{fail} | \text{female}) \)) approximate marginal probabilities (e.g., \( P(\text{fail}) = 0.3 \)) unless empirical correlations arise.
-- **Access**: Ensure `student_performance_extended_dataset.csv` is in the working directory. If not, regenerate it using the TypeScript script in `generateDataset.ts` (provided separately).
+- **Access**: Ensure `student_performance_dataset.csv` is in the working directory. If not, regenerate it using the TypeScript script in `generateDataset.ts` (provided separately).
 
 ## Probability Functions
 
@@ -41,17 +41,14 @@ The project includes five TypeScript files, each containing functions to compute
 
 ### Requirements
 
-- **Node.js**: Required to run TypeScript files.
-- **TypeScript**: Install globally (`npm install -g typescript`).
-- **Papaparse**: Install for CSV parsing (`npm install papaparse`).
-- **CSV File**: Place `student_performance_extended_dataset.csv` in the working directory.
+- **Bun**: Required to run TypeScript files.
+- **CSV File**: Place `student_performance_dataset.csv` in the working directory.
 
 ### Setup Instructions
 
 1. **Install Dependencies**:
    ```bash
-   npm install -g typescript
-   npm install papaparse
+   bun install
    ```
 2. **Save Files**:
    - Save the five TypeScript files (`marginal_probabilities.ts`, `conditional_exam_probabilities.ts`, `conditional_other_probabilities.ts`, `joint_probabilities.ts`, `statistical_probabilities.ts`) in your project directory.

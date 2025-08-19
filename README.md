@@ -124,7 +124,7 @@ If the dataset is missing or needs regeneration:
    - Place the TypeScript files (`index.ts`, `src/helpers.ts`, `src/type.ts`, and probability files) in the project directory.
 3. **Install Dependencies**:
    ```bash
-   bun install papaparse
+   bun install
    ```
 4. **Ensure CSV File**:
    - Place `student_performance_dataset.csv` in the `data/` directory or generate it using `index.ts`.

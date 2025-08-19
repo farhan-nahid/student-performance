@@ -1,18 +1,14 @@
 // Function to generate random choice based on weights
 function randomChoice<T>(items: T[], weights: number[]): T {
-  // Explicitly check for undefined or null
   if (items == null || weights == null) {
     throw new Error('Items and weights must be defined');
   }
-  // Check for empty arrays
   if (items.length === 0 || weights.length === 0) {
     throw new Error('Items and weights arrays must not be empty');
   }
-  // Check for length mismatch
   if (items.length !== weights.length) {
     throw new Error('Items and weights arrays must have the same length');
   }
-  // Check for undefined elements in weights
   if (weights.some(w => w === undefined || w === null)) {
     throw new Error('Weights array must not contain undefined or null values');
   }
@@ -25,7 +21,7 @@ function randomChoice<T>(items: T[], weights: number[]): T {
   const rand = Math.random() * totalWeight;
   let weightSum = 0;
   for (let i = 0; i < items.length; i++) {
-    const weight = weights[i] as number; // Fallback to 0 if weights[i] is somehow undefined
+    const weight = weights[i] as number;
     weightSum += weight;
     if (rand <= weightSum) return items[i] as T;
   }
@@ -46,7 +42,7 @@ function clip(value: number, min: number, max: number): number {
 }
 
 // Set the number of students
-const numStudents = 100000;
+const numStudents = 200000;
 
 // Define types for the dataset
 type Gender = 'male' | 'female';
@@ -80,15 +76,41 @@ type StudentRow = [
   TeacherQuality,
   StressLevel,
   number, // distance_to_school
-  Tutoring
+  Tutoring,
+  number, // mobile_screen_time
+  number // pc_games_time
 ];
 
 // Generate data
-const genders: Gender[] = Array.from({ length: numStudents }, () =>
-  randomChoice(['male', 'female'], [0.5, 0.5])
-);
 const examResults: ExamResult[] = Array.from({ length: numStudents }, () =>
   randomChoice(['pass', 'fail'], [0.7, 0.3])
+);
+
+// Generate fields conditionally based on exam result
+const attendancePercentage: number[] = Array.from({ length: numStudents }, (_, i) => {
+  const isFail = examResults[i] === 'fail';
+  return clip(normalRandom(isFail ? 70 : 90, 10), 0, 100);
+});
+const dailyStudyHours: number[] = Array.from({ length: numStudents }, (_, i) => {
+  const isFail = examResults[i] === 'fail';
+  return clip(normalRandom(isFail ? 2 : 5, 1.5), 0, 10);
+});
+const sleepHours: number[] = Array.from({ length: numStudents }, (_, i) => {
+  const isFail = examResults[i] === 'fail';
+  return clip(normalRandom(isFail ? 9 : 7, 1.5), 4, 12);
+});
+const mobileScreenTime: number[] = Array.from({ length: numStudents }, (_, i) => {
+  const isFail = examResults[i] === 'fail';
+  return clip(normalRandom(isFail ? 5 : 2, 1.5), 0, 10);
+});
+const pcGamesTime: number[] = Array.from({ length: numStudents }, (_, i) => {
+  const isFail = examResults[i] === 'fail';
+  return clip(normalRandom(isFail ? 4 : 1, 1.2), 0, 8);
+});
+
+// Generate other fields as before
+const genders: Gender[] = Array.from({ length: numStudents }, () =>
+  randomChoice(['male', 'female'], [0.5, 0.5])
 );
 const ages: number[] = Array.from({ length: numStudents }, () =>
   Math.floor(Math.random() * (19 - 5) + 5)
@@ -99,20 +121,11 @@ const classes: number[] = Array.from({ length: numStudents }, () =>
 const parentEducated: ParentEducated[] = Array.from({ length: numStudents }, () =>
   randomChoice(['yes', 'no'], [0.6, 0.4])
 );
-const dailyStudyHours: number[] = Array.from({ length: numStudents }, () =>
-  clip(normalRandom(4, 2), 0, 10)
-);
-const attendancePercentage: number[] = Array.from({ length: numStudents }, () =>
-  clip(normalRandom(85, 10), 0, 100)
-);
 const familyIncome: FamilyIncome[] = Array.from({ length: numStudents }, () =>
   randomChoice(['low', 'medium', 'high'], [0.3, 0.5, 0.2])
 );
 const extracurricular: Extracurricular[] = Array.from({ length: numStudents }, () =>
   randomChoice(['yes', 'no'], [0.5, 0.5])
-);
-const sleepHours: number[] = Array.from({ length: numStudents }, () =>
-  clip(normalRandom(8, 1.5), 4, 12)
 );
 const internetAccess: InternetAccess[] = Array.from({ length: numStudents }, () =>
   randomChoice(['yes', 'no'], [0.8, 0.2])
@@ -159,6 +172,8 @@ const headers: string[] = [
   'stress_level',
   'distance_to_school',
   'tutoring',
+  'mobile_screen_time',
+  'pc_games_time',
 ];
 const rows: StudentRow[] = Array.from({ length: numStudents }, (_, i) => [
   genders[i] ?? 'male',
@@ -179,6 +194,8 @@ const rows: StudentRow[] = Array.from({ length: numStudents }, (_, i) => [
   stressLevel[i] ?? 'moderate',
   distanceToSchool[i] ?? 0,
   tutoring[i] ?? 'no',
+  mobileScreenTime[i] ?? 0,
+  pcGamesTime[i] ?? 0,
 ]);
 const csvContent: string = [
   headers.join(','),
@@ -187,7 +204,6 @@ const csvContent: string = [
 
 // Save to CSV file
 const fileName = 'data/student_performance_dataset.csv';
-// Ensure Bun types are available, e.g., by using `@types/bun` or Bun's built-in TypeScript support
 Bun.write(fileName, csvContent);
 
 console.log(`Dataset generated and saved to '${fileName}'. Sample of first 5 rows:`);

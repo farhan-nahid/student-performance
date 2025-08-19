@@ -88,6 +88,34 @@ async function computeMedianStudyHoursForFailed(): Promise<number> {
     : (studyHoursValues[mid] ?? 0);
 }
 
+async function computeMeanMobileScreenTimeForFailed(): Promise<number> {
+  const data = await loadDataset();
+  const failedRows = data.filter(row => row.exam_result === 'fail');
+  const totalMobileScreenTime = failedRows.reduce((sum, row) => sum + row.mobile_screen_time, 0);
+  return failedRows.length > 0 ? totalMobileScreenTime / failedRows.length : 0;
+}
+
+async function computeMeanMobileScreenTimeForPassed(): Promise<number> {
+  const data = await loadDataset();
+  const passedRows = data.filter(row => row.exam_result === 'pass');
+  const totalMobileScreenTime = passedRows.reduce((sum, row) => sum + row.mobile_screen_time, 0);
+  return passedRows.length > 0 ? totalMobileScreenTime / passedRows.length : 0;
+}
+
+async function computeMeanPcGamesTimeForFailed(): Promise<number> {
+  const data = await loadDataset();
+  const failedRows = data.filter(row => row.exam_result === 'fail');
+  const totalPcGamesTime = failedRows.reduce((sum, row) => sum + row.pc_games_time, 0);
+  return failedRows.length > 0 ? totalPcGamesTime / failedRows.length : 0;
+}
+
+async function computeMeanPcGamesTimeForPassed(): Promise<number> {
+  const data = await loadDataset();
+  const passedRows = data.filter(row => row.exam_result === 'pass');
+  const totalPcGamesTime = passedRows.reduce((sum, row) => sum + row.pc_games_time, 0);
+  return passedRows.length > 0 ? totalPcGamesTime / passedRows.length : 0;
+}
+
 // Main function to demonstrate usage
 async function main() {
   try {
@@ -101,6 +129,10 @@ async function main() {
     console.log(`Mean distance to school for passed students = ${(await computeMeanDistanceForPassed()).toFixed(2)} km`);
     console.log(`Median attendance for failed students = ${(await computeMedianAttendanceForFailed()).toFixed(2)}%`);
     console.log(`Median study hours for failed students = ${(await computeMedianStudyHoursForFailed()).toFixed(2)} hours`);
+    console.log(`Mean mobile screen time for failed students = ${(await computeMeanMobileScreenTimeForFailed()).toFixed(2)} hours`);
+    console.log(`Mean mobile screen time for passed students = ${(await computeMeanMobileScreenTimeForPassed()).toFixed(2)} hours`);
+    console.log(`Mean PC games time for failed students = ${(await computeMeanPcGamesTimeForFailed()).toFixed(2)} hours`);
+    console.log(`Mean PC games time for passed students = ${(await computeMeanPcGamesTimeForPassed()).toFixed(2)} hours`);
   } catch (error) {
     console.error('Error:', error);
   }

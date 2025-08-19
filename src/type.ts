@@ -17,4 +17,6 @@ export interface Student {
   stress_level: 'low' | 'moderate' | 'high';
   distance_to_school: number;
   tutoring: 'yes' | 'no';
+  mobile_screen_time: number;
+  pc_games_time: number;
 }

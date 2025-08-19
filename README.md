@@ -53,9 +53,8 @@ The project includes five TypeScript files, each containing functions to compute
 2. **Save Files**:
    - Save the five TypeScript files (`marginal_probabilities.ts`, `conditional_exam_probabilities.ts`, `conditional_other_probabilities.ts`, `joint_probabilities.ts`, `statistical_probabilities.ts`) in your project directory.
    - Ensure the CSV file is present.
-3. **Compile and Run**:
-   - Compile a file: `tsc <filename>.ts` (e.g., `tsc marginal_probabilities.ts`).
-   - Run: `node <filename>.js` (e.g., `node marginal_probabilities.js`).
+3. **Run**:
+   - Run a file: `bun run <path>/<filename>.ts` (e.g., `bun run src/marginal_probabilities.ts`).
 4. **Output**:
    - Each file’s `main` function prints example probabilities to the console.
 
